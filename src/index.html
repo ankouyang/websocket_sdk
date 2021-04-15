@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>消息通知</title>
+    <link rel="stylesheet" href="css/init.css">
+    <link rel="stylesheet" href="css/jquery.mCustomScrollbar.css">
+    <link rel="stylesheet" href="css/news.css">
+</head>
+<body>
+<div class="app-wrapper" id="app-wrapper" v-cloak>
+    <div class="container main-container">
+        <div class="el-row clearfix">
+            <div class="el-col-6" style=" padding-right: 10px;">
+                <div class="left-tab-box border-radius-4">
+                    <ul class="clearfix">
+                        <li  :class="{'active':index===activeIndex}" v-for="(item,index) in message_type" @click="activeMessage(index,item.type)">
+                            <span>{{item.title}}<sup class="badge is-fixed">70</sup></span> 
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="el-col-18" style="padding-left: 10px;">
+                <div class="right-examine-box">
+                    <div class="examine-box" >
+                        <div class="event-box">
+                            <ul>
+                             <li v-for="(item,index) in data">
+                                <div class="news-time">{{item.operator_time}}</div>
+                                <div class="event-list li-left">
+                                    <div class="event-img">
+                                        <img src="images/news-examine.png" alt="审核头像">
+                                        <sup class="badge is-dot"></sup>
+                                    </div>
+                                    <div class="triangle-border">
+                                        {{item.message}}
+                                    </div>
+                                </div>
+                            </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <span class="unread-btn"><i class="d-arrow-up"></i>18条新消息</span>
+                    <span class="newread-btn"><i class="d-arrow-up"></i>你有新消息</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
+<script src="js/codec.js"></script>
+<script src="js/ws_sdk.js"></script>
+<script src="js/vue.js"></script>
+<script src="https://cdn.bootcss.com/babel-polyfill/6.23.0/polyfill.min.js"></script>
+<script>
+    var VM = new Vue({
+        el: '#app-wrapper',
+        data: function data() {
+            return {
+                activeIndex:0,
+                activeType:'audit',
+                data:[
+                    {message:`发布文章《希望疫情早日结束》，去审核吧。1`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'},
+                    {message:`发布文章《希望疫情早日结束》，去审核吧。2`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'}
+                ],
+                audit:[
+                    {message:`发布文章《希望疫情早日结束》，去审核吧。1`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'},
+                    {message:`发布文章《希望疫情早日结束》，去审核吧。2`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'}
+                ],
+                comment:[
+                    {message:`评论文章《希望疫情早日结束》，去审核吧。1`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'},
+                    {message:`评论文章《希望疫情早日结束》，去审核吧。2`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'},
+                    {message:`评论文章《希望疫情早日结束》，去审核吧。2`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'},
+                    {message:`评论文章《希望疫情早日结束》，去审核吧。2`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'},
+                    {message:`评论文章《希望疫情早日结束》，去审核吧。2`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'},
+                    {message:`评论文章《希望疫情早日结束》，去审核吧。2`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'},
+                    {message:`评论文章《希望疫情早日结束》，去审核吧。2`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'},
+                    {message:`评论文章《希望疫情早日结束》，去审核吧。2`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'},
+                    {message:`评论文章《希望疫情早日结束》，去审核吧。2`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'},
+                    {message:`评论文章《希望疫情早日结束》，去审核吧。2`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'},
+                    {message:`评论文章《希望疫情早日结束》，去审核吧。2`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'},
+                    {message:`评论文章《希望疫情早日结束》，去审核吧。2`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'},
+                    {message:`评论文章《希望疫情早日结束》，去审核吧。2`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'},
+                    {message:`评论文章《希望疫情早日结束》，去审核吧。2`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'},
+                ],
+                report:[
+                    {message:`举报文章《希望疫情早日结束》，去审核吧。1`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'},
+                    {message:`举报《希望疫情早日结束》，去审核吧。2`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'},
+                    {message:`举报《希望疫情早日结束》，去审核吧。2`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'},
+                    {message:`举报《希望疫情早日结束》，去审核吧。2`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'},
+                    {message:`举报《希望疫情早日结束》，去审核吧。2`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'},
+                    {message:`举报《希望疫情早日结束》，去审核吧。2`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'},
+                    {message:`举报《希望疫情早日结束》，去审核吧。2`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'},
+                    {message:`举报《希望疫情早日结束》，去审核吧。2`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'},
+                    {message:`举报《希望疫情早日结束》，去审核吧。2`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'},
+                    {message:`举报《希望疫情早日结束》，去审核吧。2`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'},
+                    {message:`举报《希望疫情早日结束》，去审核吧。2`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'},
+                    {message:`举报《希望疫情早日结束》，去审核吧。2`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'},
+                ],
+                coinsGolds:[
+                    {message:`阅读文章加积分+10。1`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'},
+                    {message:`文章被阅读减积分-10。2`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'},
+                    {message:`文章被阅读减积分-10。2`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'},
+                    {message:`文章被阅读减积分-10。2`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'},
+                    {message:`文章被阅读减积分-10。2`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'},
+                    {message:`文章被阅读减积分-10。2`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'},
+                    {message:`文章被阅读减积分-10。2`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'},
+                    {message:`文章被阅读减积分-10。2`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'},
+                    {message:`文章被阅读减积分-10。2`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:'2020-3-24 18:00'}
+                ],
+                message_type:[
+                    {title:'审核',type:'audit'},
+                    {title:'评论',type:'comment'},
+                    {title:'举报',type:'report'},
+                    {title:'积分/金币',type:'coinsGolds'}
+                ]
+            };
+        },
+        created(){
+            function GetLocalParameters () {
+                var name, value
+                var str = location.href // 取得整个地址栏
+                var num = str.indexOf('?')
+                str = str.substr(num + 1) // 取得所有参数   stringvar.substr(start [, length ]
+
+                var arr = str.split('&') // 各个参数放到数组里
+                for (var i = 0; i < arr.length; i++) {
+                    num = arr[i].indexOf('=')
+                    if (num > 0) {
+                        name = arr[i].substring(0, num)
+                        value = arr[i].substr(num + 1)
+                        this[name] = value
+                    }
+                }
+            }
+            var _this=this
+            // var totalNumber = 0
+            // var test=setInterval(function () {
+            //  _this.data['audit'].push({message:`发布文章《希望疫情早日结束》，去审核吧。${totalNumber}`,operator:'张三',operator_portrait:'images/news-examine.png',operator_time:_this.getTime(1584934843)})
+            //     totalNumber++
+            //     setTimeout(function () {
+            //         $(".examine-box").mCustomScrollbar("scrollTo", "bottom", {
+            //             scrollInertia:500
+            //         });
+            //     },100)
+            //     if( totalNumber == 20 ){
+            //         clearInterval( test )
+            //         return
+            //     }
+            // },1000)
+            var obj = new GetLocalParameters()
+            var codec = new MyCodec();
+            var token={"mid":obj.token, "platform":"web"};
+            var strToken= JSON.stringify(token);
+            console.log(strToken==='{"mid":"dht123","platform":"web"}');
+            console.log(codec.encode(4, '{"mid":"dht123","platform":"web"}'));
+            console.log(codec.encode(4, strToken));
+            // var client = new MyClient({
+            //     wsUrl:'ws://192.168.0.182:3014/ws',//必填
+            //     token:'{"mid":"dht123", "platform":"web"}',//必填
+            //     notify: function(data) {
+            //         VM.messageReceived(type,data)
+            //     }
+            // });
+
+        },
+        methods: {
+            sendAjaxMessage(text) {
+                $.ajax({
+                    header:{
+                        "content-type":"text/plain; charset=utf-8"
+                    },
+                    type:'POST',
+                    url:'http://192.168.0.182:8080/messages?operation=1000&mids=dht123',
+                    data:text,
+                    async:false,
+                    success:function (msg) {
+
+                    },error:function (er) {
+
+                    }
+                });
+            },
+            getMessageType (){
+                var _this=this;
+                $.ajax({
+                    headers: {
+                        'content-type': 'application/json;',
+                    },
+                    url:'/order',
+                    type:'GET',
+                    async:false,
+                    success:function (msg) {
+                        if(msg.code==0){
+                        }
+                    },error:function (er) {
+
+                    }
+                });
+            },
+            activeMessage(index,type){
+                this.activeIndex = index;
+                this.activeType = type;
+                switch (type) {
+                    case 'audit':
+                        this.data = this.audit;
+                        break;
+                    case 'comment':
+                        this.data = this.comment;
+                        break;
+                    case 'report':
+                        this.data = this.report;
+                        break;
+                    case 'coinsGolds':
+                        this.data = this.coinsGolds;
+                        break;
+                    default:break
+                }
+                setTimeout(function () {
+                    $(".examine-box").mCustomScrollbar("scrollTo", "bottom", {
+                        scrollInertia: 500
+                    });
+                },100)
+            },
+            messageReceived(type,data){
+                switch (type) {
+                    case 'audit':data['audit'].push(data);break
+                    case 'comment':data['comment'].push(data);break
+                    case 'coins-golds':data['coins-golds'].push(data);break
+                    default:break
+                }
+            },
+            getLocalParameters () {
+               var name, value
+               var str = location.href // 取得整个地址栏
+               var num = str.indexOf('?')
+               str = str.substr(num + 1) // 取得所有参数   stringvar.substr(start [, length ]
+               var arr = str.split('&') // 各个参数放到数组里
+                for (var i = 0; i < arr.length; i++) {
+                    num = arr[i].indexOf('=')
+                    if (num > 0) {
+                        name = arr[i].substring(0, num)
+                        value = arr[i].substr(num + 1)
+                        this[name] = value
+                    }
+                }
+            },
+            getQueryString(key){
+                return decodeURIComponent(key);
+            },
+            mCustomScrollbarBottom(){
+                $(".examine-box").mCustomScrollbar({
+                    theme:"dark",
+                    scrollInertia: 1500
+                });
+                $(".examine-box").mCustomScrollbar("scrollTo", "bottom", {
+                    scrollInertia: 0
+                });
+            },
+            getTime (nS, boolean) {
+                if (!nS) {
+                    return
+                }
+                var date = new Date(parseInt(nS * 1000))
+                var year = date.getFullYear()
+                var mon = date.getMonth() + 1
+                var day = date.getDate()
+                var hours = date.getHours()
+                var minu = date.getMinutes()
+                var sec = date.getSeconds()
+                if (mon < 10) {
+                    mon = '0' + mon
+                };
+                if (day < 10) {
+                    day = '0' + day
+                };
+                if (hours < 10) {
+                    hours = '0' + hours
+                };
+                if (minu < 10) {
+                    minu = '0' + minu
+                };
+                if (sec < 10) {
+                    sec = '0' + sec
+                };
+                if (boolean) {
+                    return year + '-' + mon + '-' + day
+                } else {
+                    return year + '-' + mon + '-' + day + ' ' + hours + ':' + minu + ':' + sec
+                }
+            }
+        }
+    })
+    $(function(){
+        $(window).load(function () {
+           VM.mCustomScrollbarBottom()
+        });
+        $('.unread-btn').on('click', function () {
+            $(".examine-box").mCustomScrollbar("scrollTo", "top", {
+                scrollInertia: 500
+            });
+        });
+        $('.newread-btn').on('click', function () {
+            $(".examine-box").mCustomScrollbar("scrollTo", "bottom", {
+                scrollInertia: 500
+            });
+        });
+    })
+</script>
+</body>
+</html>
