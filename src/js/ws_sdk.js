@@ -85,7 +85,7 @@
                     "content-type":"text/plain; charset=utf-8"
                 },
                 type:'POST',
-                url:'http://192.168.0.182:8080/messages',
+                url:'http://jbdht.com/messages',
                 data:JSON.stringify(data),
                 async:false,
                 success:function (msg) {
